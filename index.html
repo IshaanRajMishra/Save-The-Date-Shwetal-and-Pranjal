@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Save the Date!</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fdf6f0 0%, #fce8f3 50%, #ede8fd 100%);
+    font-family: 'Georgia', serif;
+    color: #3a2a2a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: #7c3f6e;
+    margin: 2rem 0 0.25rem;
+    text-align: center;
+  }
+
+  .names {
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-weight: 400;
+    text-align: center;
+    margin: 0.5rem 0 0.25rem;
+    color: #3a2a2a;
+  }
+
+  .names a {
+    color: #c0547a;
+    text-decoration: none;
+  }
+  .names a:hover { text-decoration: underline; }
+
+  .amp { color: #999; font-style: italic; margin: 0 0.3rem; }
+
+  .date-label {
+    font-size: 1.1rem;
+    color: #a0607a;
+    letter-spacing: 0.08em;
+    margin: 0.5rem 0 2rem;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c0547a, transparent);
+    margin: 0 auto 2rem;
+  }
+
+  .countdown-section {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .countdown-section h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7c3f6e;
+    margin-bottom: 1.5rem;
+  }
+
+  .countdown {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 64px;
+  }
+
+  .unit .num {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 300;
+    color: #7c3f6e;
+    line-height: 1;
+    font-family: 'Georgia', serif;
+  }
+
+  .unit .lbl {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a07080;
+    margin-top: 0.4rem;
+  }
+
+  .message-card {
+    max-width: 500px;
+    width: 100%;
+    background: rgba(255,255,255,0.7);
+    border: 0.5px solid rgba(192,84,122,0.2);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    text-align: center;
+    margin: 1.5rem 0;
+    line-height: 1.8;
+    font-size: 0.97rem;
+    color: #5a3a44;
+  }
+
+  .message-card .sign {
+    margin-top: 1.2rem;
+    font-style: italic;
+    color: #c0547a;
+  }
+
+  .envelope-btn {
+    font-size: 2.5rem;
+    cursor: pointer;
+    display: inline-block;
+    margin: 1rem 0;
+    transition: transform 0.2s;
+    user-select: none;
+    filter: drop-shadow(0 2px 4px rgba(192,84,122,0.2));
+  }
+  .envelope-btn:hover { transform: scale(1.15) rotate(-5deg); }
+  .envelope-btn:active { transform: scale(0.95); }
+
+  .envelope-msg {
+    display: none;
+    font-size: 0.9rem;
+    color: #c0547a;
+    font-style: italic;
+    margin-bottom: 1rem;
+    animation: fadein 0.4s ease;
+  }
+  .envelope-msg.show { display: block; }
+
+  @keyframes fadein { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .comments-section {
+    max-width: 520px;
+    width: 100%;
+    margin-top: 2rem;
+  }
+
+  .comments-section h2 {
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #7c3f6e;
+    margin-bottom: 1.2rem;
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .comment-form input,
+  .comment-form textarea {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: 0.5px solid rgba(192,84,122,0.35);
+    border-radius: 10px;
+    font-family: 'Georgia', serif;
+    font-size: 0.9rem;
+    background: rgba(255,255,255,0.8);
+    color: #3a2a2a;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+  .comment-form input:focus,
+  .comment-form textarea:focus { border-color: #c0547a; }
+
+  .comment-form button {
+    align-self: flex-end;
+    padding: 0.55rem 1.5rem;
+    border: 0.5px solid #c0547a;
+    background: transparent;
+    color: #c0547a;
+    border-radius: 20px;
+    font-family: 'Georgia', serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .comment-form button:hover { background: #c0547a; color: #fff; }
+
+  .comments-list { display: flex; flex-direction: column; gap: 0.9rem; }
+
+  .comment-item {
+    background: rgba(255,255,255,0.65);
+    border: 0.5px solid rgba(192,84,122,0.15);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+  }
+  .comment-item .c-name { font-weight: 600; font-size: 0.85rem; color: #7c3f6e; margin-bottom: 0.25rem; }
+  .comment-item .c-text { font-size: 0.9rem; color: #5a3a44; line-height: 1.6; }
+
+  .loading-msg { font-style: italic; color: #a07080; font-size: 0.9rem; text-align: center; padding: 1rem 0; }
+
+  .hearts { font-size: 1.2rem; color: #e08090; margin: 0.3rem 0 0; display: block; letter-spacing: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Save the Date!</h1>
+
+<p class="names">
+  <a href="https://instagram.com/<place-holder>" target="_blank">Shwetal</a>
+  <span class="amp">&amp;</span>
+  <a href="https://instagram.com/<place-holder>" target="_blank">Pranjal</a>
+</p>
+
+<p class="date-label">27th April, 2026</p>
+<span class="hearts">♥ ♥ ♥</span>
+
+<div class="divider" style="margin-top:1.5rem;"></div>
+
+<div class="countdown-section">
+  <h2>Countdown to the Big Day</h2>
+  <div class="countdown">
+    <div class="unit"><span class="num" id="days">0</span><span class="lbl">Days</span></div>
+    <div class="unit"><span class="num" id="hours">0</span><span class="lbl">Hours</span></div>
+    <div class="unit"><span class="num" id="minutes">0</span><span class="lbl">Minutes</span></div>
+    <div class="unit"><span class="num" id="seconds">0</span><span class="lbl">Seconds</span></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="message-card">
+  <p>Dear Guest,</p>
+  <br>
+  <p>Your presence will make our celebration even more special.<br>
+  We cannot wait to celebrate this beautiful journey with you.</p>
+  <p class="sign">With love,<br>Shwetal &amp; Pranjal ❤️</p>
+</div>
+
+<div class="envelope-msg" id="envMsg">We can't wait to see you there! 💌</div>
+<span class="envelope-btn" id="envBtn" title="Tap me!">💌</span>
+
+<div class="divider"></div>
+
+<!-- <div class="comments-section">
+  <h2>💬 Leave a Comment</h2>
+  <div class="comment-form">
+    <input type="text" id="nameInput" placeholder="Your name" maxlength="60" />
+    <textarea id="msgInput" rows="3" placeholder="Write your wishes here..."></textarea>
+    <button onclick="postComment()">Post Comment</button>
+  </div>
+  <div class="comments-list" id="commentsList">
+    <p class="loading-msg" id="loadingMsg">No comments yet. Be the first to wish them!</p>
+  </div>
+</div> -->
+
+<script>
+  const wedding = new Date('2026-04-27T00:00:00');
+
+  function tick() {
+    const now = new Date();
+    const diff = wedding - now;
+    if (diff <= 0) {
+      document.getElementById('days').textContent = '0';
+      document.getElementById('hours').textContent = '0';
+      document.getElementById('minutes').textContent = '0';
+      document.getElementById('seconds').textContent = '0';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('days').textContent = d;
+    document.getElementById('hours').textContent = h;
+    document.getElementById('minutes').textContent = m;
+    document.getElementById('seconds').textContent = s;
+  }
+
+  tick();
+  setInterval(tick, 1000);
+
+  document.getElementById('envBtn').addEventListener('click', function() {
+    const msg = document.getElementById('envMsg');
+    msg.classList.toggle('show');
+  });
+
+  const comments = [];
+
+  function postComment() {
+    const name = document.getElementById('nameInput').value.trim();
+    const msg = document.getElementById('msgInput').value.trim();
+    if (!name || !msg) return;
+
+    comments.unshift({ name, msg });
+    document.getElementById('nameInput').value = '';
+    document.getElementById('msgInput').value = '';
+    renderComments();
+  }
+
+  function renderComments() {
+    const list = document.getElementById('commentsList');
+    const loading = document.getElementById('loadingMsg');
+    if (comments.length === 0) {
+      loading.style.display = 'block';
+      list.innerHTML = '';
+      list.appendChild(loading);
+      return;
+    }
+    list.innerHTML = '';
+    comments.forEach(c => {
+      const el = document.createElement('div');
+      el.className = 'comment-item';
+      el.innerHTML = `<div class="c-name">${esc(c.name)}</div><div class="c-text">${esc(c.msg)}</div>`;
+      list.appendChild(el);
+    });
+  }
+
+  function esc(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+</script>
+
+</body>
+</html>
